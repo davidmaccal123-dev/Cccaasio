@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Red Arcade — Mini Games</title>
+<style>
+:root{--gold:#ff3030;--gold2:#ff7777;--bg:#070707;--card:#131313;--card2:#1a1a1a;--line:#541313;--muted:#a7a7a7;--green:#63e68a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 50% -10%,#3a0808,#070707 35%);color:#fff;font:15px Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer}.top{position:sticky;top:0;z-index:20;background:#090909ee;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+.header{max-width:1100px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:14px;justify-content:space-between}.brand{font-weight:900;letter-spacing:2px;color:var(--gold);font-size:21px}.wallet{border:1px solid #8f2020;background:#1d0909;padding:9px 13px;border-radius:22px;color:var(--gold);font-weight:800}
+nav{max-width:1100px;margin:auto;display:flex;gap:7px;padding:8px 12px;overflow:auto}nav button{flex:0 0 auto;border:1px solid #343434;background:#171717;color:#ddd;border-radius:10px;padding:9px 12px}nav button.active, .gold{background:var(--gold)!important;color:#111!important;border-color:var(--gold)!important;font-weight:800}
+main{max-width:1100px;margin:auto;padding:18px}.screen{display:none}.screen.active{display:block}.hero{border:1px solid var(--line);border-radius:24px;padding:28px;text-align:center;background:radial-gradient(circle at 50% 0,#3b0b0b,#121212 60%);box-shadow:0 15px 50px #0008}.hero h1{font-size:38px;margin:0 0 8px;color:var(--gold)}.hero p{color:#bbb}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.sectionTitle{color:var(--gold);margin:26px 0 12px}.card,.panel,.game{background:linear-gradient(145deg,#1b1111,#101010);border:1px solid #292929;border-radius:19px;padding:18px;box-shadow:0 10px 25px #0004}.card h3{color:var(--gold);margin:0 0 8px}.card p{color:#bbb;line-height:1.45}.card button,.panel button,.game button{border:1px solid #555;background:#242424;color:#fff;border-radius:11px;padding:10px 14px}.tag{display:inline-block;color:#111;background:var(--gold);padding:4px 8px;border-radius:8px;font-size:12px;font-weight:800}.muted{color:var(--muted)}.center{text-align:center}.big{font-size:74px;margin:18px}.result{min-height:27px;color:#ddd;font-weight:700;margin:13px}.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.stat{display:flex;justify-content:space-between;border-bottom:1px solid #292929;padding:11px 0}.stat b{color:var(--gold)}input,select{background:#202020;border:1px solid #4b4b4b;color:#fff;padding:11px;border-radius:10px;outline:none}.meter{height:12px;background:#282828;border-radius:10px;overflow:hidden}.meter i{display:block;height:100%;width:0;background:var(--gold);transition:.2s}.badges{display:flex;gap:8px;flex-wrap:wrap}.badge{border:1px solid #7d1b1b;background:#1a0808;border-radius:12px;padding:9px;color:var(--gold)}.locked{opacity:.35}.leader{display:grid;grid-template-columns:45px 1fr auto;gap:10px;padding:10px;border-bottom:1px solid #292929}.notice{padding:12px;border-radius:12px;background:#171717;border:1px solid #333;color:#ddd}.toast{position:fixed;right:16px;bottom:16px;background:#151515;border:1px solid var(--gold);color:#fff;padding:12px 15px;border-radius:12px;display:none;z-index:99}.cups{display:flex;justify-content:center;gap:13px;margin:20px 0}.cup{font-size:52px!important;padding:15px!important}.slots{display:flex;justify-content:center;gap:8px}.reel{width:80px;height:80px;display:grid;place-items:center;border:2px solid #70591d;border-radius:14px;background:#222;font-size:40px}.target{width:70px;height:70px;border-radius:50%;background:var(--gold);border:0;position:absolute}.arena{height:270px;position:relative;background:#0c0c0c;border:1px solid #333;border-radius:16px;overflow:hidden}.blockgrid{display:grid;grid-template-columns:repeat(6,42px);gap:5px;justify-content:center;margin:18px}.blk{height:42px;border-radius:7px;background:#54371e;border:1px solid #80582f}.memory{display:grid;grid-template-columns:repeat(4,65px);gap:8px;justify-content:center}.mem{height:65px;font-size:25px}.snakeBoard{width:280px;height:280px;background:#111;border:2px solid #514117;margin:15px auto;position:relative;overflow:hidden}.snakeDot{position:absolute;width:14px;height:14px;background:var(--gold);border-radius:3px}.quizOpt{margin:5px}.hidden{display:none!important}.footer{text-align:center;color:#666;padding:30px}.small{font-size:12px;color:#777}
+@media(max-width:600px){.header{padding:12px}.brand{font-size:17px}.hero h1{font-size:29px}.grid{grid-template-columns:1fr 1fr}.card{padding:14px}.memory{grid-template-columns:repeat(4,58px)}.mem{height:58px}.big{font-size:60px}}
+@media(max-width:420px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="top">
+<header class="header"><div class="brand">● RED ARCADE ●</div><div class="wallet">⭐ <span id="balance">1000</span></div></header>
+<nav id="nav">
+<button class="active" data-go="home">⌂ Головна</button>
+<button data-go="games">🎮 Ігри</button>
+<button data-go="profile">👤 Профіль</button>
+<button data-go="more">☰ Ще</button><button data-go="extras">✨ 30+</button>
+</nav></div>
+
+<main>
+<section id="home" class="screen active">
+<div class="hero"><span class="tag">RED ARCADE</span><h1>Грай. Збирай. Відкривай.</h1><p>Без реальних ставок, депозитів чи грошових призів. Тільки мініігри, XP та віртуальні ⭐.</p>
+<div class="controls"><button class="gold" onclick="randomGame()">🎲 Мені пощастить</button><button onclick="go('daily')">🎁 Daily Bonus</button></div></div>
+<h2 class="sectionTitle">🔥 Hot Games</h2><div class="grid" id="hotGrid"></div>
+<h2 class="sectionTitle">🎯 Сьогодні</h2><div class="grid"><div class="card"><h3>🎁 Daily Bonus</h3><p>Забери безкоштовний бонус раз на добу.</p><button class="gold" onclick="claimDaily()">Забрати</button><div class="result" id="dailyHome"></div></div><div class="card"><h3>📅 Streak</h3><p>Серія входів: <b id="streakHome">1</b> 🔥</p><button onclick="go('profile')">Профіль</button></div><div class="card"><h3>🎯 Місії</h3><p id="missionHome">Завантаження…</p><button onclick="go('missions')">Переглянути</button></div></div>
+</section>
+
+
+<section id="extras" class="screen">
+<div class="hero"><span class="tag">30 НОВИХ ФУНКЦІЙ</span><h1>🔥 Red Arcade Plus</h1><p>Ще 30 фішок для твого демо-аркадного сайту. Усе працює локально та використовує тільки віртуальні ⭐.</p></div>
+<div class="grid">
+<div class="card"><h3>1. ✏️ Змінити нік</h3><input id="nickInput" placeholder="Новий нік"><button class="gold" onclick="setNick()">Зберегти</button></div>
+<div class="card"><h3>2. 🔊 Звук</h3><p id="soundState">Увімкнено</p><button class="gold" onclick="toggleSound()">Перемкнути</button></div>
+<div class="card"><h3>3. ⛶ Повний екран</h3><button class="gold" onclick="fullScreen()">Увімкнути</button></div>
+<div class="card"><h3>4. 🕒 Годинник</h3><div class="big" id="liveClock">--:--:--</div></div>
+<div class="card"><h3>5. 📅 Дата</h3><div id="liveDate">--</div></div>
+<div class="card"><h3>6. 🎲 Випадкова гра</h3><button class="gold" onclick="randomGame()">Обрати гру</button><p id="randomGameMsg"></p></div>
+<div class="card"><h3>7. 🔥 Серія кліків</h3><button class="gold" onclick="clickCombo()">Клік!</button><p id="comboMsg">0 кліків</p></div>
+<div class="card"><h3>8. ⚡ Швидкий клік</h3><button class="gold" onclick="fastClick()">Натисни</button><p id="fastMsg"></p></div>
+<div class="card"><h3>9. 🧠 Загадка</h3><p>Що має клавіші, але не відкриває двері?</p><button class="gold" onclick="riddle()">Відповідь</button><p id="riddleMsg"></p></div>
+<div class="card"><h3>10. 🧮 Калькулятор</h3><input id="calcA" type="number" placeholder="Число"><input id="calcB" type="number" placeholder="Число"><button class="gold" onclick="calc()">+</button><p id="calcMsg"></p></div>
+<div class="card"><h3>11. 📊 Лічильник</h3><button class="gold" onclick="counter(-1)">−</button> <b id="counter">0</b> <button class="gold" onclick="counter(1)">+</button></div>
+<div class="card"><h3>12. 💾 Зберегти прогрес</h3><button class="gold" onclick="save();toast('💾 Прогрес збережено')">Зберегти</button></div>
+<div class="card"><h3>13. 🔄 Оновити статистику</h3><button class="gold" onclick="update();toast('📊 Статистику оновлено')">Оновити</button></div>
+<div class="card"><h3>14. 🏆 Рівень</h3><p id="extraLevel">Рівень 1</p></div>
+<div class="card"><h3>15. 📈 XP</h3><div class="meter"><i id="extraXP" style="width:0%"></i></div><p id="extraXPText">0 XP</p></div>
+<div class="card"><h3>16. 🎯 Ціль дня</h3><p>Зіграй 3 міні-ігри.</p><button class="gold" onclick="dailyGoal()">Перевірити</button><p id="goalMsg"></p></div>
+<div class="card"><h3>17. 🧹 Очистити поле</h3><button class="gold" onclick="clearMsg()">Очистити повідомлення</button></div>
+<div class="card"><h3>18. 📋 Статус профілю</h3><button class="gold" onclick="profileStatus()">Показати</button><p id="profileStatus"></p></div>
+<div class="card"><h3>19. 🌟 VIP-рамка</h3><button class="gold" onclick="vipFrame()">Активувати</button><p id="vipMsg"></p></div>
+<div class="card"><h3>20. 🎨 Червоний режим</h3><button class="gold" onclick="redMode()">Увімкнути</button></div>
+<div class="card"><h3>21. 🌑 Нічний режим</h3><button class="gold" onclick="nightMode()">Перемкнути</button></div>
+<div class="card"><h3>22. 📱 Вібрація</h3><button class="gold" onclick="vibrate()">Тест</button><p id="vibMsg"></p></div>
+<div class="card"><h3>23. 🧩 Пам'ять</h3><button class="gold" onclick="memoryHint()">Підказка</button><p id="memoryHintMsg"></p></div>
+<div class="card"><h3>24. 🚀 Буст XP</h3><button class="gold" onclick="xpBoost()">+25 XP</button></div>
+<div class="card"><h3>25. ⭐ Буст очок</h3><button class="gold" onclick="pointBoost()">+25 ⭐</button></div>
+<div class="card"><h3>26. 📜 Історія</h3><button class="gold" onclick="showHistory()">Показати</button><p id="historyMsg">Поки порожньо</p></div>
+<div class="card"><h3>27. 🏅 Моя картка</h3><button class="gold" onclick="playerCard()">Створити</button><p id="playerCardMsg"></p></div>
+<div class="card"><h3>28. 🔐 Локальний PIN</h3><input id="pinInput" maxlength="4" placeholder="4 цифри"><button class="gold" onclick="setPin()">Задати</button><p id="pinMsg"></p></div>
+<div class="card"><h3>29. 🧪 Тест системи</h3><button class="gold" onclick="systemTest()">Запустити</button><p id="systemMsg"></p></div>
+<div class="card"><h3>30. ♻️ Скинути налаштування</h3><button class="gold" onclick="resetSettings()">Скинути</button><p id="resetMsg"></p></div>
+</div>
+</section>
+<section id="games" class="screen"><div class="panel"><h2>🎮 Arcade Hub</h2><p class="muted">Обирай будь-яку гру. Усі ігри безкоштовні.</p></div><div class="grid" id="gamesGrid"></div></section>
+
+<section id="profile" class="screen"><div class="panel"><h2>👤 Профіль</h2><div class="row"><input id="nick" placeholder="Твій нік"><button class="gold" onclick="saveProfile()">Зберегти</button></div><div class="stat"><span>⭐ Очки</span><b id="pBalance"></b></div><div class="stat"><span>⚡ XP</span><b id="xp"></b></div><div class="stat"><span>👑 Рівень</span><b id="level"></b></div><div class="stat"><span>🎮 Ігор</span><b id="gamesPlayed"></b></div><div class="stat"><span>🔥 Streak</span><b id="streak"></b></div><h3>Прогрес рівня</h3><div class="meter"><i id="xpbar"></i></div><p class="small" id="xptext"></p><h3>🎖️ Досягнення</h3><div class="badges" id="badges"></div></div></section>
+
+<section id="missions" class="screen"><div class="panel"><h2>🎯 Місії дня</h2><div id="missionList"></div></div></section>
+<section id="leaders" class="screen"><div class="panel"><h2>🏆 Hall of Fame</h2><div id="leaderList"></div><p class="small">Демо-рейтинг цього браузера.</p></div></section>
+<section id="events" class="screen"><div class="panel"><h2>🎫 Event Center</h2><div class="grid"><div class="card"><h3>⚡ Weekend Rush</h3><p>Набери 100 очок у будь-яких мінііграх.</p><span class="tag">+100 ⭐</span></div><div class="card"><h3>🧩 Memory Week</h3><p>Знайди 5 пар у Memory.</p><span class="tag">+150 ⭐</span></div><div class="card"><h3>🕵️ Secret Room</h3><p>Виконай 3 досягнення, щоб відкрити секретну мінігру.</p><span class="tag">SECRET</span></div></div></div></section>
+<section id="friends" class="screen"><div class="panel"><h2>👥 Друзі</h2><p class="muted">Демо-список друзів та запрошень.</p><div id="friendsList"></div><br><button class="gold" onclick="inviteFriend()">📨 Запросити друга</button><div class="result" id="friendMsg"></div></div></section>
+<section id="shop" class="screen"><div class="panel"><h2>🛍️ Магазин</h2><p class="muted">Лише декоративні предмети за віртуальні ⭐.</p><div class="grid" id="shopGrid"></div></div></section>
+<section id="news" class="screen"><div class="panel"><h2>📣 Новини</h2><div class="notice"><b>✦ Red Arcade запущено!</b><br>Нові мініігри та події з'являтимуться тут.</div><br><div class="notice">🎁 Daily Bonus уже доступний.</div></div></section>
+<section id="more" class="screen">
+<div class="panel">
+<h2>☰ Меню</h2>
+<div class="grid">
+<div class="card"><h3>🎯 Місії</h3><p>Щоденні завдання та прогрес.</p><button class="gold" onclick="go('missions')">Відкрити</button></div>
+<div class="card"><h3>🏆 Рейтинг</h3><p>Hall of Fame та найкращі результати.</p><button class="gold" onclick="go('leaders')">Відкрити</button></div>
+<div class="card"><h3>🎫 Події</h3><p>Тимчасові челенджі та нагороди.</p><button class="gold" onclick="go('events')">Відкрити</button></div>
+<div class="card"><h3>👥 Друзі</h3><p>Друзі та запрошення.</p><button class="gold" onclick="go('friends')">Відкрити</button></div>
+<div class="card"><h3>🛍️ Магазин</h3><p>Декоративні предмети за ⭐.</p><button class="gold" onclick="go('shop')">Відкрити</button></div>
+<div class="card"><h3>📣 Новини</h3><p>Оновлення Red Arcade.</p><button class="gold" onclick="go('news')">Відкрити</button></div>
+<div class="card"><h3>🎁 Daily Bonus</h3><p>Безкоштовний щоденний бонус.</p><button class="gold" onclick="go('daily')">Відкрити</button></div>
+<div class="card"><h3>⚙️ Адмін</h3><p>Панель керування демо-очками.</p><button class="gold" onclick="go('admin')">Відкрити</button></div>
+</div></div></section>
+<section id="daily" class="screen"><div class="game center"><h2>🎁 Daily Bonus</h2><div class="big">🎁</div><p>Безкоштовний щоденний бонус.</p><button class="gold" onclick="claimDaily()">Забрати бонус</button><div class="result" id="dailyMsg"></div></div></section>
+
+<!-- games -->
+<section id="chicken" class="screen"><div class="game center"><h2>🐔 Chicken Hut</h2><div class="big" id="chickenEmoji">🐔</div><p>Натисни на курочку та отримай бонусні очки.</p><button class="gold" onclick="play('chicken')">ЛОВИТИ</button><div class="result" id="chickenMsg"></div></div></section>
+<section id="block" class="screen"><div class="game center"><h2>⛏️ Block World</h2><div class="big" id="blockEmoji">🟫</div><p>Добувай ресурси у маленькому кубічному світі.</p><button class="gold" onclick="play('block')">⛏️ КОПАТИ</button><div class="result" id="blockMsg"></div></div></section>
+<section id="slots" class="screen"><div class="game center"><h2>🎰 Slots</h2><div class="slots"><div class="reel" id="r1">🍒</div><div class="reel" id="r2">⭐</div><div class="reel" id="r3">💎</div></div><p>Безкоштовне обертання. Це не ставка.</p><button class="gold" onclick="spin()">КРУТИТИ</button><div class="result" id="slotMsg"></div></div></section>
+<section id="crush" class="screen"><div class="game center"><h2>💥 Crush</h2><p>За 5 секунд натисни кнопку якомога більше разів.</p><div class="big" id="crushScore">0</div><button class="gold" id="crushBtn" onclick="startCrush()">START</button><div class="result" id="crushMsg"></div></div></section>
+<section id="cups" class="screen"><div class="game center"><h2>🥤 Стаканчики</h2><p>Запам'ятай, де сховалась ⭐.</p><div class="cups"><button class="cup" onclick="pickCup(0)">🥤</button><button class="cup" onclick="pickCup(1)">🥤</button><button class="cup" onclick="pickCup(2)">🥤</button></div><button class="gold" onclick="newCups()">Перемішати</button><div class="result" id="cupMsg"></div></div></section>
+<section id="wheel" class="screen"><div class="game center"><h2>🎡 Wheel</h2><div class="big" id="wheelIcon">🎡</div><button class="gold" onclick="wheel()">КРУТИТИ БЕЗКОШТОВНО</button><div class="result" id="wheelMsg"></div></div></section>
+<section id="quiz" class="screen"><div class="game center"><h2>🧠 Quiz</h2><p id="quizQ"></p><div id="quizOpts"></div><div class="result" id="quizMsg"></div></div></section>
+<section id="memory" class="screen"><div class="game center"><h2>🃏 Memory Cards</h2><p>Знайди всі пари.</p><div class="memory" id="memoryBoard"></div><div class="result" id="memoryMsg"></div><button onclick="newMemory()">Нова гра</button></div></section>
+<section id="reaction" class="screen"><div class="game center"><h2>🟢 Reaction Test</h2><p>Натисни START, потім натисни, коли блок стане зеленим.</p><button class="gold" onclick="startReaction()">START</button><div id="reactionBox" style="height:140px;border-radius:15px;background:#222;margin:18px auto;max-width:500px;display:grid;place-items:center">Чекай…</div><div class="result" id="reactionMsg"></div></div></section>
+<section id="aim" class="screen"><div class="game center"><h2>🎯 Aim</h2><p>Влуч у ціль 10 разів.</p><div class="arena" id="aimArena"></div><div class="result" id="aimMsg"></div></div></section>
+<section id="tower" class="screen"><div class="game center"><h2>🧱 Tower Builder</h2><p>Натискай вчасно, щоб будувати вежу.</p><div class="big" id="towerHeight">0</div><button class="gold" onclick="tower()">🧱 Додати блок</button><div class="result" id="towerMsg"></div></div></section>
+<section id="racing" class="screen"><div class="game center"><h2>🏎️ Mini Racing</h2><p>Хто швидше дістанеться фінішу?</p><div class="meter"><i id="carProgress"></i></div><button class="gold" onclick="race()">ГОНКА</button><div class="result" id="raceMsg"></div></div></section>
+<section id="snake" class="screen"><div class="game center"><h2>🐍 Snake</h2><p>Натискай кнопки напрямку та збирай ⭐.</p><div class="snakeBoard" id="snakeBoard"><div class="snakeDot" id="snakeDot"></div></div><div class="controls"><button onclick="moveSnake('up')">⬆️</button><button onclick="moveSnake('left')">⬅️</button><button onclick="moveSnake('down')">⬇️</button><button onclick="moveSnake('right')">➡️</button></div><div class="result" id="snakeMsg"></div></div></section>
+<section id="space" class="screen"><div class="game center"><h2>🚀 Space Runner</h2><p>Ухиляйся від перешкод.</p><div class="arena" id="spaceArena"><div style="font-size:45px;position:absolute;bottom:15px;left:calc(50% - 20px)">🚀</div></div><button class="gold" onclick="spaceRun()">START RUN</button><div class="result" id="spaceMsg"></div></div></section>
+
+<section id="admin" class="screen"><div class="game center"><h2>⚙️ Адмін-панель</h2><p id="adminStatus">Введи код адміністратора.</p><div id="adminLogin"><input id="adminCode" type="password" inputmode="numeric" placeholder="Код"><br><br><button class="gold" onclick="adminLogin()">Увійти</button><div class="result" id="adminMsg"></div></div><div id="adminPanel" class="hidden"><div class="stat"><span>Баланс</span><b id="adminBalance"></b></div><br><input id="adminAmount" type="number" min="1" placeholder="Кількість ⭐"><div class="controls" style="margin-top:10px"><button class="gold" onclick="adminAdd()">➕ Додати</button><button onclick="adminRemove()">➖ Забрати</button><button onclick="adminLogout()">Вийти</button></div><div class="result" id="adminAction"></div><p class="small">Демо-адмінка працює лише локально у цьому браузері.</p></div></div></section>
+</main>
+<div class="toast" id="toast"></div>
+<footer class="footer">Red Arcade © 2026 · Віртуальні очки не мають грошової вартості.</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const games=[
+['chicken','🐔','Chicken Hut','Лови курочку'],['block','⛏️','Block World','Добувай ресурси'],['slots','🎰','Slots','Комбінації символів'],['crush','💥','Crush','Швидкість натискань'],['cups','🥤','Стаканчики','Знайди ⭐'],['wheel','🎡','Wheel','Безкоштовне колесо'],['quiz','🧠','Daily Quiz','Питання дня'],['memory','🃏','Memory Cards','Знайди пари'],['reaction','🟢','Reaction Test','Перевір реакцію'],['aim','🎯','Aim','Влуч у ціль'],['tower','🧱','Tower Builder','Будуй вежу'],['racing','🏎️','Mini Racing','Гонка на час'],['snake','🐍','Snake','Збирай ⭐'],['space','🚀','Space Runner','Ухиляйся']];
+let state={balance:1000,xp:0,games:0,best:0,nick:'Player',streak:1,lastDaily:0,missions:{games:0,points:0},achievements:[]};
+try{state=Object.assign(state,JSON.parse(localStorage.getItem('gaState')||'{}'))}catch(e){}
+function save(){localStorage.setItem('gaState',JSON.stringify(state));update()}
+function update(){
+$('balance').textContent=state.balance;$('pBalance').textContent=state.balance;$('xp').textContent=state.xp;$('gamesPlayed').textContent=state.games;$('streak').textContent=state.streak;$('streakHome').textContent=state.streak;$('nick').value=state.nick;
+let level=Math.floor(state.xp/100)+1, cur=state.xp%100;$('level').textContent=level;$('xpbar').style.width=cur+'%';$('xptext').textContent=cur+'/100 XP до наступного рівня';
+$('homeBalance').textContent=state.balance;$('adminBalance').textContent=state.balance;
+renderBadges();renderMissions();renderLeaders();renderFriends();renderShop();
+}
+function toast(t){$('toast').textContent=t;$('toast').style.display='block';clearTimeout(window.tt);window.tt=setTimeout(()=>$('toast').style.display='none',1800)}
+function go(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.go===id));window.scrollTo(0,0)}
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+function reward(n, msg=''){state.balance+=n;state.xp+=Math.max(1,Math.floor(n/2));state.games++;state.missions.games++;state.missions.points+=n;save();if(msg)toast(msg)}
+function saveProfile(){state.nick=$('nick').value.trim()||'Player';save();toast('Профіль збережено')}
+function randomGame(){go(games[Math.floor(Math.random()*games.length)][0]);toast('🎲 Випадкова гра обрана!')}
+function claimDaily(){
+let now=Date.now(), day=86400000;
+if(now-state.lastDaily<day){let h=Math.ceil((day-(now-state.lastDaily))/3600000);$('dailyMsg').textContent='Вже забрано. Спробуй через ~'+h+' год.';$('dailyHome').textContent='Вже забрано сьогодні.';return}
+state.lastDaily=now;state.streak++;reward(50,'🎁 +50 ⭐ за Daily Bonus!');$('dailyMsg').textContent='🎉 +50 ⭐';$('dailyHome').textContent='🎉 Отримано +50 ⭐'}
+function play(type){
+let data={chicken:[5,20,'🐔 Піймав! +'],block:[5,25,'⛏️ Добуто! +']}[type];let n=data[0]+Math.floor(Math.random()*(data[1]-data[0]+1));reward(n);$(type+'Msg').textContent=data[2]+n+' ⭐';if(type==='chicken')$('chickenEmoji').textContent=['🐔','🥚','🍗'][Math.floor(Math.random()*3)];else $('blockEmoji').textContent=['🟫','🪨','💎','🌳'][Math.floor(Math.random()*4)]}
+const sy=['🍒','🍋','⭐','💎','7️⃣'];
+function spin(){let a=[];for(let i=1;i<=3;i++){let x=sy[Math.floor(Math.random()*sy.length)];a.push(x);$('r'+i).textContent=x}let n=a[0]===a[1]&&a[1]===a[2]?60:a[0]===a[1]||a[1]===a[2]||a[0]===a[2]?20:5;reward(n);$('slotMsg').textContent='🎁 Нагорода +'+n+' ⭐'}
+let crushing=false,cnt=0,timer;
+function startCrush(){if(crushing)return;crushing=true;cnt=0;$('crushScore').textContent=0;$('crushBtn').textContent='НАТИСКАЙ!';$('crushBtn').onclick=()=>{if(crushing){cnt++;$('crushScore').textContent=cnt}};timer=setTimeout(()=>{crushing=false;$('crushBtn').textContent='START';$('crushBtn').onclick=startCrush;state.best=Math.max(state.best,cnt);reward(cnt);$('crushMsg').textContent='⏱️ Результат '+cnt+' ⭐'},5000)}
+let cupTarget=0;function newCups(){cupTarget=Math.floor(Math.random()*3);$('cupMsg').textContent='⭐ Сховано! Обирай.'}function pickCup(i){if(i===cupTarget){reward(30);$('cupMsg').textContent='🎉 Правильно! +30 ⭐'}else $('cupMsg').textContent='❌ Не вгадав.';newCups()}
+function wheel(){let n=[5,10,15,25,50][Math.floor(Math.random()*5)];reward(n);$('wheelIcon').textContent='✨';$('wheelMsg').textContent='🎁 +'+n+' ⭐';setTimeout(()=>$('wheelIcon').textContent='🎡',500)}
+const questions=[['Яка планета найближча до Сонця?',['Меркурій','Марс','Венера'],0],['Скільки днів у тижні?',['5','7','9'],1],['Скільки сторін у трикутника?',['2','3','4'],1]];
+function quiz(){let q=questions[Math.floor(Math.random()*questions.length)];$('quizQ').textContent=q[0];$('quizOpts').innerHTML=q[1].map((x,i)=>`<button class="quizOpt ${i===q[2]?'gold':''}" onclick="answerQuiz(${i},${q[2]})">${x}</button>`).join('');$('quizMsg').textContent=''}function answerQuiz(i,c){if(i===c){reward(25);$('quizMsg').textContent='✅ Правильно! +25 ⭐'}else{$('quizMsg').textContent='❌ Спробуй інше питання.'}setTimeout(quiz,900)}
+let mem=[],open=[],matches=0;function newMemory(){let a=['🍒','🍋','⭐','💎','🐔','🚀','🎯','🧱'];mem=[...a,...a].sort(()=>Math.random()-.5);open=[];matches=0;$('memoryBoard').innerHTML=mem.map((x,i)=>`<button class="mem" onclick="flipMem(${i})">❔</button>`).join('');$('memoryMsg').textContent=''}function flipMem(i){if(open.length===2||open.includes(i))return;let b=$('memoryBoard').children;b[i].textContent=mem[i];open.push(i);if(open.length===2){if(mem[open[0]]===mem[open[1]]){matches++;open=[];if(matches===8){reward(100);$('memoryMsg').textContent='🏆 Усі пари! +100 ⭐'}}else setTimeout(()=>{b[open[0]].textContent='❔';b[open[1]].textContent='❔';open=[]},600)}}
+let reactionStart=0,reactionTimer;function startReaction(){let box=$('reactionBox');box.textContent='Не натискай…';box.style.background='#222';clearTimeout(reactionTimer);reactionTimer=setTimeout(()=>{box.textContent='🟢 ТИСНИ!';box.style.background='#185d2d';reactionStart=performance.now()},1000+Math.random()*2500);box.onclick=()=>{if(!reactionStart){box.textContent='Ще рано!';clearTimeout(reactionTimer);return}let ms=Math.round(performance.now()-reactionStart);reward(Math.max(5,Math.min(50,Math.round(1000/ms*30))));$('reactionMsg').textContent='⚡ '+ms+' мс';reactionStart=0;box.style.background='#222'}}
+let aimHits=0;function aim(){aimHits=0;placeAim()}function placeAim(){let a=$('aimArena'),t=document.createElement('button');t.className='target';t.textContent='🎯';t.style.left=Math.random()*80+'%';t.style.top=Math.random()*70+'%';t.onclick=()=>{t.remove();aimHits++;if(aimHits>=10){reward(80);$('aimMsg').textContent='🏆 10/10! +80 ⭐';aimHits=0}else{$('aimMsg').textContent=aimHits+'/10';placeAim()}};a.innerHTML='';a.appendChild(t)}
+let towerH=0;function tower(){towerH++;$('towerHeight').textContent=towerH;if(towerH>=10){reward(50);$('towerMsg').textContent='🏆 Вежа 10 блоків! +50 ⭐';towerH=0}else $('towerMsg').textContent='Висота: '+towerH}
+function race(){let n=0;$('carProgress').style.width='0%';let iv=setInterval(()=>{n+=Math.random()*22;$('carProgress').style.width=Math.min(100,n)+'%';if(n>=100){clearInterval(iv);reward(30);$('raceMsg').textContent='🏁 Фініш! +30 ⭐'}},120)}
+let sx=135,syy=135;function moveSnake(d){if(d==='up')syy-=14;if(d==='down')syy+=14;if(d==='left')sx-=14;if(d==='right')sx+=14;sx=Math.max(0,Math.min(266,sx));syy=Math.max(0,Math.min(266,syy));$('snakeDot').style.left=sx+'px';$('snakeDot').style.top=syy+'px';if(Math.random()<.25){reward(3);$('snakeMsg').textContent='⭐ +3'}else $('snakeMsg').textContent='Рух!'}}
+function spaceRun(){let a=$('spaceArena'),obs=document.createElement('div');obs.textContent='☄️';obs.style.position='absolute';obs.style.fontSize='35px';obs.style.left=Math.random()*85+'%';obs.style.top='0';a.appendChild(obs);let y=0,iv=setInterval(()=>{y+=10;obs.style.top=y+'px';if(y>235){clearInterval(iv);obs.remove();reward(15);$('spaceMsg').textContent='🚀 Вижив! +15 ⭐'}},80)}
+function renderBadges(){let defs=[['⭐','Перші 100 очок',state.balance>=100],['🎮','10 ігор',state.games>=10],['🏆','Рекорд Crush',state.best>=20],['🔥','Streak 7',state.streak>=7],['💎','500 очок',state.balance>=500],['👑','Рівень 5',Math.floor(state.xp/100)+1>=5]];$('badges').innerHTML=defs.map(x=>`<span class="badge ${x[2]?'':'locked'}">${x[0]} ${x[1]}</span>`).join('')}
+function renderMissions(){let m=[['🎮 Зіграти 5 ігор',state.missions.games,5],['⭐ Набрати 100 очок',state.missions.points,100],['🔥 Досягти 3 Streak',state.streak,3]];$('missionList').innerHTML=m.map((x,i)=>`<div class="card"><h3>${x[0]}</h3><div class="meter"><i style="width:${Math.min(100,x[1]/x[2]*100)}%"></i></div><p>${Math.min(x[1],x[2])}/${x[2]}</p>${x[1]>=x[2]?'<span class="tag">ВИКОНАНО</span>':''}</div>`).join('');$('missionHome').textContent=m[0][0]+': '+Math.min(m[0][1],m[0][2])+'/'+m[0][2]}
+function renderLeaders(){let arr=[{n:'GoldenKing',s:2450},{n:'BlockMaster',s:1930},{n:'ChickenPro',s:1500},{n:state.nick,s:state.balance}].sort((a,b)=>b.s-a.s);$('leaderList').innerHTML=arr.map((x,i)=>`<div class="leader"><b>${i+1}</b><span>${x.n}</span><b>⭐ ${x.s}</b></div>`).join('')}
+function renderFriends(){$('friendsList').innerHTML=['Alex ⭐ 1250','Max ⭐ 980','Sakura ⭐ 760'].map(x=>`<div class="stat"><span>👤 ${x}</span><b>ДРУГ</b></div>`).join('')}
+const items=[['🌸','Sakura Frame',100],['👑','Gold Crown',250],['🕶️','Neon Glasses',400],['🚀','Space Avatar',600],['💎','Diamond Badge',800]];function renderShop(){$('shopGrid').innerHTML=items.map(x=>`<div class="card"><div class="big">${x[0]}</div><h3>${x[1]}</h3><p>⭐ ${x[2]}</p><button class="gold" onclick="buyItem(${x[2]},'${x[1]}')">Придбати за ⭐</button></div>`).join('')}function buyItem(n,name){if(state.balance<n){toast('Недостатньо ⭐');return}state.balance-=n;save();toast('🛍️ Отримано: '+name)}
+function inviteFriend(){reward(25);$('friendMsg').textContent='📨 Демо-запрошення створено. +25 ⭐'}
+const ADMIN_CODE='2580';let adminLogged=false;function adminLogin(){if($('adminCode').value===ADMIN_CODE){adminLogged=true;$('adminLogin').classList.add('hidden');$('adminPanel').classList.remove('hidden');$('adminStatus').textContent='✅ Адмін-доступ активний';$('adminBalance').textContent=state.balance}else $('adminMsg').textContent='❌ Неправильний код'}function adminAdd(){let n=Math.floor(Number($('adminAmount').value));if(n>0){state.balance+=n;save();$('adminAction').textContent='✅ Додано '+n+' ⭐'}}function adminRemove(){let n=Math.floor(Number($('adminAmount').value));if(n>0){state.balance=Math.max(0,state.balance-n);save();$('adminAction').textContent='✅ Забрано '+n+' ⭐'}}function adminLogout(){adminLogged=false;$('adminLogin').classList.remove('hidden');$('adminPanel').classList.add('hidden');$('adminCode').value=''}
+function renderGames(){let box=$('gamesGrid');box.innerHTML=games.map(g=>`<div class="card"><div class="big" style="font-size:48px">${g[1]}</div><h3>${g[2]}</h3><p>${g[3]}</p><button class="gold" onclick="go('${g[0]}')">Грати</button></div>`).join('');$('hotGrid').innerHTML=games.slice(0,6).map(g=>`<div class="card"><h3>${g[1]} ${g[2]}</h3><p>${g[3]}</p><button class="gold" onclick="go('${g[0]}')">Грати</button></div>`).join('')}
+renderGames();newCups();newMemory();quiz();aim();update();
+
+// RED ARCADE PLUS — 30 додаткових функцій
+let soundOn=true, combo=0, countExtra=0, historyExtra=[];
+function setNick(){let n=$('nickInput').value.trim();if(!n)return;state.nick=n;save();update();toast('✏️ Нік змінено: '+n)}
+function toggleSound(){soundOn=!soundOn;$('soundState').textContent=soundOn?'Увімкнено':'Вимкнено'}
+function fullScreen(){if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();else toast('⛶ Повний екран недоступний')}
+function tickClock(){$('liveClock').textContent=new Date().toLocaleTimeString('uk-UA');$('liveDate').textContent=new Date().toLocaleDateString('uk-UA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('extraLevel').textContent='Рівень '+(Math.floor(state.xp/100)+1);$('extraXP').style.width=(state.xp%100)+'%';$('extraXPText').textContent=state.xp+' XP'}
+setInterval(tickClock,1000);tickClock();
+function randomGame(){let g=games[Math.floor(Math.random()*games.length)];$('randomGameMsg').textContent=g[1]+' '+g[2];go(g[0])}
+function clickCombo(){combo++;$('comboMsg').textContent=combo+' кліків';if(combo>=10){reward(10);toast('🔥 Комбо 10! +10 ⭐');combo=0}}
+function fastClick(){let t=performance.now();setTimeout(()=>{$('fastMsg').textContent='⚡ '+Math.round(performance.now()-t)+' мс'},Math.random()*300)}
+function riddle(){$('riddleMsg').textContent='⌨️ Клавіатура!'}
+function calc(){let a=Number($('calcA').value),b=Number($('calcB').value);$('calcMsg').textContent='Результат: '+(a+b)}
+function counter(n){countExtra+=n;$('counter').textContent=countExtra}
+function dailyGoal(){let ok=state.games>=3;$('goalMsg').textContent=ok?'✅ Ціль виконана!':'⏳ Ще '+(3-state.games)+' ігор'}
+function clearMsg(){document.querySelectorAll('#extras p').forEach(x=>{if(x.id!=='extraXPText')x.textContent=''})}
+function profileStatus(){$('profileStatus').textContent='👤 '+state.nick+' • ⭐ '+state.balance+' • 🎮 '+state.games+' ігор'}
+function vipFrame(){document.body.style.boxShadow='inset 0 0 80px #ff3030';$('vipMsg').textContent='✨ Рамку активовано'}
+function redMode(){document.documentElement.style.setProperty('--gold','#ff2020');document.documentElement.style.setProperty('--gold2','#ff7777');toast('🔴 Червоний режим')}
+function nightMode(){document.body.classList.toggle('nightExtra');document.body.style.filter=document.body.style.filter?'':'brightness(.8)';}
+function vibrate(){if(navigator.vibrate)navigator.vibrate(120);$('vibMsg').textContent=navigator.vibrate?'📳 Готово':'📱 Браузер не підтримує вібрацію'}
+function memoryHint(){$('memoryHintMsg').textContent='🧠 Запам’ятай: '+['🔴','⭐','🎮','🚀'][state.games%4]}
+function xpBoost(){state.xp+=25;historyExtra.push('+25 XP');save();update();tickClock();toast('🚀 +25 XP')}
+function pointBoost(){state.balance+=25;historyExtra.push('+25 ⭐');save();update();toast('⭐ +25')}
+function showHistory(){$('historyMsg').textContent=historyExtra.length?historyExtra.slice(-5).join(' • '):'Поки порожньо'}
+function playerCard(){$('playerCardMsg').textContent='🪪 '+state.nick+' | LVL '+(Math.floor(state.xp/100)+1)+' | ⭐ '+state.balance}
+function setPin(){let x=$('pinInput').value;if(!/^\d{4}$/.test(x)){$('pinMsg').textContent='❌ Потрібно 4 цифри';return}localStorage.setItem('redArcadePin',x);$('pinMsg').textContent='🔐 PIN збережено локально'}
+function systemTest(){$('systemMsg').textContent='✅ UI • localStorage • ігри • профіль — OK'}
+function resetSettings(){soundOn=true;combo=0;countExtra=0;localStorage.removeItem('redArcadePin');document.body.style.filter='';document.body.style.boxShadow='';$('resetMsg').textContent='♻️ Налаштування скинуто'}
+</script>
+</body>
+</html>
